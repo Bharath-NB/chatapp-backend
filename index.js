@@ -12,8 +12,8 @@ import channelRoutes from "./routes/ChannelRoutes.js";
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT;
-const databaseURL = process.env.DATABSE_URL;
+const port = process.env.PORT || 5000;
+const databaseURL = process.env.DATABASE_URL;
 
 app.use(
   cors({
@@ -41,10 +41,13 @@ const server = app.listen(port, () => {
 setupSocket(server);
 
 mongoose
-  .connect(databaseURL)
+  .connect(databaseURL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
-    console.log("DB Connetion Successfull");
+    console.log("DB Connection Successful");
   })
   .catch((err) => {
-    console.log(err.message);
+    console.error("DB Connection Error:", err.message);
   });
